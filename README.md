@@ -32,6 +32,7 @@ But if you need to build the image on your own locally, do the following:
   1. [Install Docker](https://docs.docker.com/engine/installation/).
   2. Pull this image from Docker Hub: `docker pull ricsanfre/docker-ubuntu-ansible:<tag>` (where `<tag>` can be any of the supported: bionic, xenial, focal e.g. `docker-ubuntu-ansible:bionic`).
   3. Run a container from the image: `docker run -d --name ubuntu-systemd --privileged --rm --tmpfs /tmp --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro -t ricsanfre/docker-ubuntu-ansible:latest` 
+  4. Connect to the container: `docker exec -it --tty ubuntu-systemd env TERM=xterm /bin/bash`
 
 
 ## Why?
@@ -50,7 +51,7 @@ Container must be started in privileged mode:
 Ubuntu's `systemd` expects `/run` and `/run/lock` to be `tmpfs` file systems,
 but it can't mount them itself in an unprivileged container:
 
-    --tmpfs /run
+    --tmpfs /
     --tmpfs /run/lock
     --tmpfs /tmp
 
