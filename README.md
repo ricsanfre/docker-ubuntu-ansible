@@ -7,32 +7,25 @@ Intended for use testing Ansible roles with Molecule
 
 **Development use only. Do not use in production!**
 
-## Branches
-
-This repository one branche that relate to Ubuntu a version.
-
-|Branch |Ubuntu Version       |Docker image tag|
-|-------|---------------------|----------------|
-|main   |focal fossa (2004)   |latest          |
-|focal  |focal fossa (2004)   |focal           |
-|bionic |bionic beaver (1804) |bionic          |
-|xenial |xenial xerus (1604)  |xenial          |
-
-Here are Ubuntu's [supported versions](https://wiki.ubuntu.com/Releases).
-
-## Pull strategy
-
-The different branches are **not** merged, they live as individual branches.
-
 
 ## How to Build
 
-This image is built on Docker Hub automatically any time the upstream OS container is rebuilt, and any time a commit is made to any of the branches. 
+This image is built for all differente ubuntu releases (xenial, bionic, focal) on Docker Hub automatically any time the upstream OS container is rebuilt, and any time a commit is made to the master branch.
+
+|Ubuntu Image tag |Ubuntu Version        |Docker image tag|
+|-----------------|--------------------- |----------------|
+|late             |focal fossa (20.04)   |latest          |
+|focal            |focal fossa (20.04)   |focal           |
+|bionic           |bionic beaver (1804)  |bionic          |
+|xenial           |xenial xerus (1604)   |xenial          |
+
+
 But if you need to build the image on your own locally, do the following:
 
   1. [Install Docker](https://docs.docker.com/install/).
   2. `cd` into this directory.
-  3. Run `docker build -t ubuntu2004-ansible .`
+  3. Run `docker build -t ubuntu-systemd:<tag> --build-arg TAG=<tag> .`. Where `<tag>` is the tag of the base ubuntu image in DockerHub
+
 
 ## How to Use
 

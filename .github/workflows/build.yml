@@ -6,9 +6,6 @@ on:
   push:
     branches:
       - master
-      - bionic
-      - xenial
-      - focal
   schedule:
     - cron: "10 1 * * 0"
 
@@ -17,39 +14,31 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        release: [latest, 20.04, 18.04, 16.04]
     steps:
       - uses: actions/checkout@v2
 
       - name: Test building image.
-        run: docker build -t docker-ansible .
+        run: docker build -t docker-ansible:${{ matrix.release }} --build-arg TAG=${{ matrix.release }} .
 
       - name: Run the built image.
-        run: docker run --name test-container -d --privileged --tmpfs /tmp --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro docker-ansible
+        run: docker run --name test-container_${{ matrix.release }} -d --privileged --tmpfs /tmp --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro docker-ansible:${{ matrix.release }}
 
       - name: Verify Ansible is accessible in the built image.
-        run: docker exec --tty test-container env TERM=xterm uptime
+        run: docker exec --tty test-container_${{ matrix.release }} env TERM=xterm uptime
 
   # If on master branch, build and release image.
   release:
     name: Release
     runs-on: ubuntu-latest
     needs: test
-    
+    if: github.ref == 'refs/heads/master'
+    strategy:
+      matrix:
+        release: [latest, 20.04, 18.04, 16.04]
     steps:
-      - name: Get the current branch name
-        shell: bash
-        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-        id: branch
-      - name: Set Tag based on branch name
-        id: setTag
-        run: |
-          if [[ "${{ steps.branch.outputs.branch }}" == "master" ]]; then
-            echo "::set-output name=tag::latest"
-          fi
-          if [[ "${{ steps.branch.outputs.branch }}" != "master" ]]; then
-            echo "::set-output name=tag::${{ steps.branch.outputs.branch }}"
-          fi
       - uses: actions/checkout@v2
       - uses: docker/setup-qemu-action@v1
       - uses: docker/setup-buildx-action@v1
@@ -63,6 +52,7 @@ jobs:
         with:
           context: ./
           file: Dockerfile
+          build-args: TAG=${{ matrix.release }}
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ github.repository }}:${{ steps.setTag.outputs.tag }}
+          tags: ${{ github.repository }}:${{ matrix.release }}

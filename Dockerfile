@@ -1,4 +1,6 @@
-FROM ubuntu:latest
+ARG TAG=latest
+
+FROM ubuntu:$TAG
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
