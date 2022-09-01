@@ -12,12 +12,13 @@ Intended for use testing Ansible roles with Molecule
 
 This image is built for all differente ubuntu releases (xenial, bionic, focal) on Docker Hub automatically any time the upstream OS container is rebuilt, and any time a commit is made to the master branch.
 
-|Ubuntu Image tag |Ubuntu Version        |Docker image tag|
-|-----------------|--------------------- |----------------|
-|late             |focal fossa (20.04)   |latest          |
-|focal            |focal fossa (20.04)   |focal           |
-|bionic           |bionic beaver (1804)  |bionic          |
-|xenial           |xenial xerus (1604)   |xenial          |
+|Ubuntu Image tag |Ubuntu Version          |Docker image tag|
+|-----------------|----------------------- |----------------|
+|latest           |focal fossa (20.04)     |latest          |
+|22.04            |jammy jellyfish (22.04) |22.04           |
+|20.04            |focal fossa (20.04)     |20.04           |
+|18.04            |bionic beaver (1804)    |18.04           |
+|16.04            |xenial xerus (1604)     |16.04           |
 
 
 But if you need to build the image on your own locally, do the following:
