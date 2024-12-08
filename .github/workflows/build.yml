@@ -24,7 +24,10 @@ jobs:
         run: docker build -t docker-ansible:${{ matrix.release }} --build-arg TAG=${{ matrix.release }} .
 
       - name: Run the built image.
-        run: docker run --name test-container_${{ matrix.release }} -d --privileged --tmpfs /tmp --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro docker-ansible:${{ matrix.release }}
+        run: >-
+          docker run --name test-container_${{ matrix.release }} -d --privileged
+          -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cgroupns=host
+          docker-ansible:${{ matrix.release }}
 
       - name: Verify Ansible is accessible in the built image.
         run: docker exec --tty test-container_${{ matrix.release }} env TERM=xterm uptime
