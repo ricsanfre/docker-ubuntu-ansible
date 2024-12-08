@@ -14,7 +14,8 @@ This image is built for all differente ubuntu releases (xenial, bionic, focal) o
 
 |Ubuntu Image tag |Ubuntu Version          |Docker image tag|
 |-----------------|----------------------- |----------------|
-|latest           |focal fossa (20.04)     |latest          |
+|latest           |noble numbat (24.04)    |latest          |
+|24.04            |noble numbat (24.04)    |24.04
 |22.04            |jammy jellyfish (22.04) |22.04           |
 |20.04            |focal fossa (20.04)     |20.04           |
 |18.04            |bionic beaver (1804)    |18.04           |
